@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
 #    environment: dev
     env:
-      TFC_WORKSPACE: 2Ops_${{ vars.AZURE_ENVIRONMENT }}
+      TFC_WORKSPACE: ${{ vars.AZURE_ENVIRONMENT }}
       TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
     steps:
       - name: Checkout code
