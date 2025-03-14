@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Enter Environment Name"
+        required: true
+        default: "dev"
 
 env:
 # Secrets
@@ -17,8 +23,9 @@ env:
   TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
 # Vars
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-  AZURE_ENVIRONMENT : ${{ vars.AZURE_ENVIRONMENT }}
   AZURE_PROJECT_NAME : ${{ vars.AZURE_PROJECT_NAME }}
+# Vars input
+  AZURE_ENVIRONMENT: ${{ inputs.environment }}
 
 jobs:
   terraform:
