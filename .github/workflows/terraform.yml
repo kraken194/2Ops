@@ -51,7 +51,7 @@ jobs:
 
       - name: Terraform Init
         working-directory: terraform
-        run: terraform init
+        run: terraform init -backend-config="workspace=${{ vars.TFC_WORKSPACE }}"
 
       - name: Terraform Plan
         working-directory: terraform
