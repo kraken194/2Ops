@@ -52,7 +52,7 @@ jobs:
 
       - name: Select Workspace
         run: |
-          WORKSPACE_NAME= ${{TFC_WORKSPACE}}
+          WORKSPACE_NAME= $TFC_WORKSPACE
           terraform workspace select $WORKSPACE_NAME 
       
       - name: Terraform Init
