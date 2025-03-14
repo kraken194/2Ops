@@ -51,10 +51,11 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}  # Auto-login to Terraform Cloud
           terraform_version : latest
 
-      - name: Select Workspace
+      - name: Select or Create Workspace
         run: |
-          WORKSPACE_NAME=$TFC_WORKSPACE
-          terraform workspace select $WORKSPACE_NAME 
+          WORKSPACE_NAME="$TFC_WORKSPACE" 
+          echo "Selecting workspace: $WORKSPACE_NAME"
+          terraform workspace select "$WORKSPACE_NAME"
       
       - name: Terraform Init
         working-directory: terraform
