@@ -51,7 +51,7 @@ jobs:
 
       - name: Select Workspace
         run: |
-          WORKSPACE_NAME="2Ops-${{ vars.TFC_WORKSPACE }}"
+          WORKSPACE_NAME="2Ops_${{ vars.AZURE_ENVIRONMENT }}"
           terraform workspace select $WORKSPACE_NAME 
       
       - name: Terraform Init
