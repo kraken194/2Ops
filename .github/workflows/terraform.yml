@@ -53,9 +53,9 @@ jobs:
 
       - name: Select or Create Workspace
         run: |
-          WORKSPACE_NAME="qa" 
+          WORKSPACE_NAME="$TFC_WORKSPACE"
           echo "Selecting workspace: $WORKSPACE_NAME"
-          terraform workspace select "qa"
+          terraform workspace select "$WORKSPACE_NAME" || terraform workspace new "$WORKSPACE_NAME"
       
       - name: Terraform Init
         working-directory: terraform
