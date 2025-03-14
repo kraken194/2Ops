@@ -30,7 +30,7 @@ env:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    environment: dev
+#    environment: dev
     env:
       TFC_WORKSPACE: 2Ops_${{ vars.AZURE_ENVIRONMENT }}
       TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
@@ -38,6 +38,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Print Environment Variable
+        run: |
+          echo "Deploying to environment: $AZURE_ENVIRONMENT"
+        
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
         with:
