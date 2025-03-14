@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
 #    environment: dev
     env:
-      TFC_WORKSPACE: ${{ vars.AZURE_ENVIRONMENT }}
+      TFC_WORKSPACE: "2Ops_${{ vars.AZURE_ENVIRONMENT }}"
       TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
     steps:
       - name: Checkout code
@@ -42,6 +42,7 @@ jobs:
       - name: Print Environment Variable
         run: |
           echo "Deploying to environment: $AZURE_ENVIRONMENT"
+          echo "workspace name : $TFC_WORKSPACE"
         
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
@@ -51,7 +52,7 @@ jobs:
 
       - name: Select Workspace
         run: |
-          WORKSPACE_NAME="2Ops_${{ vars.AZURE_ENVIRONMENT }}"
+          WORKSPACE_NAME= ${{TFC_WORKSPACE}}
           terraform workspace select $WORKSPACE_NAME 
       
       - name: Terraform Init
