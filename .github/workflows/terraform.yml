@@ -49,9 +49,15 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}  # Auto-login to Terraform Cloud
           terraform_version : latest
 
+      - name: Select Workspace
+        run: |
+          WORKSPACE_NAME="2Ops-${{ vars.TFC_WORKSPACE }}"
+          terraform workspace select $WORKSPACE_NAME 
+      
       - name: Terraform Init
         working-directory: terraform
         run: terraform init -backend-config="workspace=${{ vars.TFC_WORKSPACE }}"
+
 
       - name: Terraform Plan
         working-directory: terraform
