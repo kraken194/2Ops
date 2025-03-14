@@ -1,18 +1,19 @@
 name: Terraform Deployment
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       environment:
         description: "Enter Environment Name"
         required: true
-        default: "dev"
+        #default: "dev"
+ # push:
+ #   branches:
+ #     - main
+ # pull_request:
+ #   branches:
+ #     - main
+
 
 env:
 # Secrets
