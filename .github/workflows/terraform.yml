@@ -14,6 +14,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
 # Vars
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
   AZURE_ENVIRONMENT : ${{ vars.AZURE_ENVIRONMENT }}
@@ -25,12 +26,16 @@ jobs:
     environment: dev
     env:
       TFC_WORKSPACE: 2Ops_${{ var.AZURE_ENVIRONMENT }}
+      TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}  # Auto-login to Terraform Cloud
+          terraform_version : latest
 
       - name: Terraform Init
         run: terraform init
