@@ -23,6 +23,8 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: dev
+    env:
+      TFC_WORKSPACE: 2Ops_${{ var.AZURE_ENVIRONMENT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
