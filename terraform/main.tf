@@ -3,7 +3,7 @@ terraform {
     hostname     = "app.terraform.io"
     organization = "2Ops_test"
     workspaces {
-      prefix = "2Ops_"
+      name = "2Ops_qa"
     }
   }
 }
