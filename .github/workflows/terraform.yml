@@ -25,6 +25,7 @@ env:
 # Vars
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
   AZURE_PROJECT_NAME : ${{ vars.AZURE_PROJECT_NAME }}
+  TFC_WORKSPACE: "2Ops_${{ vars.AZURE_ENVIRONMENT }}"
 # Vars input
   AZURE_ENVIRONMENT: ${{ inputs.environment }}
 
@@ -33,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
 #    environment: dev
     env:
-      TFC_WORKSPACE: "2Ops_${{ vars.AZURE_ENVIRONMENT }}"
+      #TFC_WORKSPACE: "2Ops_${{ vars.AZURE_ENVIRONMENT }}"
       TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
     steps:
       - name: Checkout code
