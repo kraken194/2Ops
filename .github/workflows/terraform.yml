@@ -38,9 +38,11 @@ jobs:
           terraform_version : latest
 
       - name: Terraform Init
+        working-directory: terraform
         run: terraform init
 
       - name: Terraform Plan
+        working-directory: terraform
         run: |
           terraform plan \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
@@ -49,6 +51,7 @@ jobs:
             -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
 
       - name: Terraform Apply
+        working-directory: terraform
         if: github.ref == 'refs/heads/main'
         run: |
           terraform apply -auto-approve \
