@@ -6,6 +6,18 @@ on:
       environment:
         description: "Enter Environment Name"
         required: true
+        type: choice
+        options:
+          - dev
+          - qa
+      command:
+        description: "Select Terraform Command"
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
 
 env:
   # Secrets
@@ -22,7 +34,7 @@ env:
   AZURE_SERVICE_STORAGE_CONTAINER_NAME: "${{ inputs.environment }}.${{ vars.AZURE_SERVICE_STORAGE_CONTAINER_NAME }}"
   # Dynamic vars
   AZURE_ENVIRONMENT: ${{ inputs.environment }}
-  AZURE_TERRAFORM_STATE_KEY: "${{ inputs.environment }}.${{ vars.AZURE_TERRAFORM_STATE_NAME }}"
+  AZURE_TERRAFORM_STATE_KEY: "${{ inputs.environment }}.${{ vars.AZURE_TERRAFORM_STATE_NAME }}" # Moved here
 
 jobs:
   terraform:
@@ -32,14 +44,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Print Environment Variable
-        run: |
-          echo "Deploying to environment: $AZURE_ENVIRONMENT"
-        
       - name: Azure CLI Login
         run: |
           az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
+      - name: Print Environment Variable
+        run: |
+          echo "Deploying to environment: $AZURE_ENVIRONMENT"
+        
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
         with:
@@ -52,9 +64,10 @@ jobs:
             -backend-config="resource_group_name=${{ vars.AZURE_SERVICE_RESOURCE_GROUP_NAME }}" \
             -backend-config="storage_account_name=${{ vars.AZURE_SERVICE_STORAGE_ACCOUNT_NAME }}" \
             -backend-config="container_name=${{ vars.AZURE_SERVICE_STORAGE_CONTAINER_NAME }}" \
-            -backend-config="key=${{ env.AZURE_TERRAFORM_STATE_KEY }}"
+            -backend-config="key=${{ env.AZURE_TERRAFORM_STATE_KEY }}" # Updated here
 
       - name: Terraform Plan
+        if: ${{ inputs.command == 'plan' }}
         working-directory: terraform
         run: |
           terraform plan \
@@ -62,8 +75,17 @@ jobs:
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}"
 
       - name: Terraform Apply
+        if: ${{ inputs.command == 'apply' }}
         working-directory: terraform
         run: |
           terraform apply -auto-approve \
+            -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
+            -var="environment=${{ vars.AZURE_ENVIRONMENT }}"
+
+      - name: Terraform Destroy
+        if: ${{ inputs.command == 'destroy' }}
+        working-directory: terraform
+        run: |
+          terraform destroy -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}"
