@@ -30,12 +30,15 @@ env:
   AZURE_SERVICE_STORAGE_CONTAINER_NAME: "${{ inputs.environment }}.${{ vars.AZURE_SERVICE_STORAGE_CONTAINER_NAME }}"
 # Dynamic vars
   AZURE_ENVIRONMENT: ${{ inputs.environment }}
-  AZURE_TERRAFORM_STATE_KEY : "${{ inputs.environment }}.${{ vars.AZURE_TERRAFORM_STATE_NAME }}"
+  #AZURE_TERRAFORM_STATE_KEY : "${{ inputs.environment }}.${{ vars.AZURE_TERRAFORM_STATE_NAME }}"
 
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    env:
+      AZURE_TERRAFORM_STATE_KEY: "${{ inputs.environment }}.${{ vars.AZURE_TERRAFORM_STATE_NAME }}"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
