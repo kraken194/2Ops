@@ -74,6 +74,6 @@ jobs:
         working-directory: terraform
         if: github.ref == 'refs/heads/main'
         run: |
-          terraform apply -auto-approve \
+          terraform apply -lock=false -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}" 
