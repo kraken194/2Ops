@@ -83,4 +83,4 @@ jobs:
         working-directory: terraform
         if: always()
         run: |
-          terraform state push errored.tfstate
+          terraform state push -lock=false errored.tfstate
