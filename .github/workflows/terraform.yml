@@ -65,7 +65,7 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform
         run: |
-          terraform plan \
+          terraform plan -lock=false \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
             -var="location=${{ vars.AZURE_LOCATION }}" \
