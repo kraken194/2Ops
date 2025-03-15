@@ -14,9 +14,9 @@ terraform {
     
     organization = "2Ops_test" 
 
-    workspaces { 
-      name = "2Ops_dev" 
-    } 
+    # workspaces { 
+    #   name = "2Ops_dev" 
+    # } 
   } 
 }
 
