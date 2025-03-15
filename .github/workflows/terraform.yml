@@ -77,3 +77,10 @@ jobs:
           terraform apply -lock=false -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}" 
+
+
+      - name: Hard push state
+        working-directory: terraform
+        if: github.ref == 'refs/heads/main'
+        run: |
+          terraform state push errored.tfstate
