@@ -81,6 +81,6 @@ jobs:
 
       - name: Hard push state
         working-directory: terraform
-        if: github.ref == 'refs/heads/main'
+        if: always()
         run: |
           terraform state push errored.tfstate
