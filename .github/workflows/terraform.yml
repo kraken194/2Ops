@@ -67,9 +67,8 @@ jobs:
         run: |
           terraform plan -lock=false \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
-            -var="location=${{ vars.AZURE_LOCATION }}" \
-            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
+            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" 
+
 
       - name: Terraform Apply
         working-directory: terraform
@@ -77,6 +76,4 @@ jobs:
         run: |
           terraform apply -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
-            -var="location=${{ vars.AZURE_LOCATION }}" \
-            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}"
+            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" 
