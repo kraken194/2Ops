@@ -67,7 +67,7 @@ jobs:
             -backend-config="key=${{ env.AZURE_TERRAFORM_STATE_KEY }}" # Updated here
 
       - name: Terraform Plan
-        if: ${{ inputs.command == 'plan' }}
+        if: ${{ inputs.command == 'plan' || inputs.command == 'apply' }}
         working-directory: terraform
         run: |
           terraform plan \
