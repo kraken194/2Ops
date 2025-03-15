@@ -17,25 +17,25 @@ on:
 
 env:
 # Secrets
-  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
 # Vars
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
   AZURE_PROJECT_NAME : ${{ vars.AZURE_PROJECT_NAME }}
-  #TFC_WORKSPACE: "2Ops_${{ vars.AZURE_ENVIRONMENT }}"
-# Vars input
+  AZURE_SERVICE_RESOURCE_GROUP_NAME: ${{ vars.AZURE_SERVICE_RESOURCE_GROUP_NAME }}
+  AZURE_SERVICE_STORAGE_ACCOUNT_NAME: ${{ vars.AZURE_SERVICE_STORAGE_ACCOUNT_NAME }}
+  AZURE_SERVICE_STORAGE_CONTAINER_NAME: "${{ inputs.environment }}.${{ vars.AZURE_SERVICE_STORAGE_CONTAINER_NAME }}"
+# Dynamic vars
   AZURE_ENVIRONMENT: ${{ inputs.environment }}
+  AZURE_TERRAFORM_STATE_KEY : "${{ inputs.environment }}.${{ vars.AZURE_TERRAFORM_STATE_NAME }}"
+
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-#    environment: dev
-    env:
-      TF_WORKSPACE: "2Ops_${{ inputs.environment }}"
-      TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -43,44 +43,33 @@ jobs:
       - name: Print Environment Variable
         run: |
           echo "Deploying to environment: $AZURE_ENVIRONMENT"
-          echo "workspace name : $TF_WORKSPACE"
         
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}  # Auto-login to Terraform Cloud
           terraform_version : latest
 
-#      - name: Select or Create Workspace
-#        run: |
-#          WORKSPACE_NAME="$TF_WORKSPACE"
-#          echo "Selecting workspace: $WORKSPACE_NAME"
-#          terraform workspace select "$WORKSPACE_NAME" || terraform workspace new "$WORKSPACE_NAME"
-      
       - name: Terraform Init
         working-directory: terraform
-        run: terraform init
-
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ vars.AZURE_SERVICE_RESOURCE_GROUP_NAME }}" \
+            -backend-config="storage_account_name=${{ vars.AZURE_SERVICE_STORAGE_ACCOUNT_NAME }}" \
+            -backend-config="container_name=${{ vars.AZURE_SERVICE_STORAGE_CONTAINER_NAME }}" \
+            -backend-config="key=${{ AZURE_TERRAFORM_STATE_KEY }}"
 
       - name: Terraform Plan
         working-directory: terraform
         run: |
-          terraform plan -lock=false \
+          terraform plan \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}" 
 
 
       - name: Terraform Apply
         working-directory: terraform
-        if: github.ref == 'refs/heads/main'
         run: |
-          terraform apply -lock=false -auto-approve \
+          terraform apply -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}" 
 
-
-      - name: Hard push state
-        working-directory: terraform
-        if: always()
-        run: |
-          terraform state push -lock=false errored.tfstate
