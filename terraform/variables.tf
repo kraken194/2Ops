@@ -24,10 +24,6 @@ variable "tenant_id" {
 variable "environment" {
   type        = string
   description = "Environment selector"
-  validation {
-    condition     = can(regex("^(dev|qa|stage|prod|)$", var.environment))
-    error_message = "Invalid environmet index, only allowed index are: 'dev', 'qa', 'stage', 'prod'"
-  }
 }
 
 variable "project_name" {
