@@ -74,9 +74,9 @@ jobs:
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
             -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
             -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
-            -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \ 
+            -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \
             -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
-            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}" 
+            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}"
 
       - name: Terraform Apply
         if: ${{ inputs.command == 'apply' }}
@@ -88,7 +88,7 @@ jobs:
             -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \ 
             -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
-            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}" 
+            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}"
 
 
       - name: Terraform Destroy
@@ -101,4 +101,4 @@ jobs:
             -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \ 
             -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
-            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}" 
+            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}"
