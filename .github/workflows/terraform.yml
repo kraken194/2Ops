@@ -72,7 +72,8 @@ jobs:
         run: |
           terraform plan \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}"
+            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
+            -var="tenant_id=${{ vars.AZURE_TENANT_ID }}"
 
       - name: Terraform Apply
         if: ${{ inputs.command == 'apply' }}
@@ -80,7 +81,8 @@ jobs:
         run: |
           terraform apply -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}"
+            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
+            -var="tenant_id=${{ vars.AZURE_TENANT_ID }}"
 
       - name: Terraform Destroy
         if: ${{ inputs.command == 'destroy' }}
@@ -88,4 +90,5 @@ jobs:
         run: |
           terraform destroy -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}"
+            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
+            -var="tenant_id=${{ vars.AZURE_TENANT_ID }}"
