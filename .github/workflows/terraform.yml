@@ -24,7 +24,6 @@ env:
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  TFE_TOKEN: ${{ secrets.TF_API_TOKEN }}
   # Vars
   AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
   AZURE_PROJECT_NAME: ${{ vars.AZURE_PROJECT_NAME }}
@@ -77,11 +76,11 @@ jobs:
         run: |
           terraform plan \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
-            -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
+            -var="environment=${{ inputs.environment }}" \
+            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \
-            -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
-            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}"
+            -var="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+            -var="client_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
 
       - name: Terraform Apply
         if: ${{ inputs.command == 'apply' }}
@@ -89,11 +88,11 @@ jobs:
         run: |
           terraform apply -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
-            -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
+            -var="environment=${{ inputs.environment }}" \
+            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \
-            -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
-            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}"
+            -var="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+            -var="client_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
 
       - name: Terraform Destroy
         if: ${{ inputs.command == 'destroy' }}
@@ -101,8 +100,8 @@ jobs:
         run: |
           terraform destroy -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
-            -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
+            -var="environment=${{ inputs.environment }}" \
+            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \
-            -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
-            -var="client_secret=${{ vars.AZURE_CLIENT_SECRET }}"
+            -var="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
+            -var="client_secret=${{ secrets.AZURE_CLIENT_SECRET }}"
