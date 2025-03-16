@@ -77,7 +77,7 @@ jobs:
         run: |
           terraform plan \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
+            -var="environment=${{ AZURE_ENVIRONMENT }}" \
             -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \
             -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
@@ -89,7 +89,7 @@ jobs:
         run: |
           terraform apply -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
+            -var="environment=${{ AZURE_ENVIRONMENT }}" \
             -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \
             -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
@@ -101,7 +101,7 @@ jobs:
         run: |
           terraform destroy -auto-approve \
             -var="project_name=${{ vars.AZURE_PROJECT_NAME }}" \
-            -var="environment=${{ vars.AZURE_ENVIRONMENT }}" \
+            -var="environment=${{ AZURE_ENVIRONMENT }}" \
             -var="tenant_id=${{ vars.AZURE_TENANT_ID }}" \
             -var="subscription_id=${{ vars.AZURE_SUBSCRIPTION_ID }}" \
             -var="client_id=${{ vars.AZURE_CLIENT_ID }}" \
